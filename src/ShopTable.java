@@ -1,30 +1,56 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class ShopTable extends JTable {
+    private ArrayList<String> arrayList = new ArrayList<>();
 
-    // Todo: Potřebuju zobrazit tabulku pod tlačítkem + aby zobrazovala columnNames a data
-
-    String[] columnNames = {"Name", "Roll Number", "Department"};
-    String[][] data = {
-            {"Kundan Kumar Jha", "4031", "CSE"},
-            {"Anand Jha", "6014", "IT"}
-    };
-
-    public ShopTable(int width, int height) {
-        init(width, height);
-
+    public ArrayList<String> getArrayList() {
+        return arrayList;
     }
 
-    private void init(int width, int height) {
+    public void addToList(String value) {
+        System.out.println("přidáno do listu: " + value);
+        this.arrayList.add(value);
+        updateModel();
+    }
 
+    public void removeFromList(int index) {
+        this.arrayList.remove(index);
+        updateModel();
+    }
+    public int listSize() {
+        return this.arrayList.size();
+    }
+
+    public ShopTable() {
+        init();
+    }
+
+    private void init() {
         setBackground(Color.red);
-        this.setSize(width, height);
-        System.out.println("Funguje!");
-        JFrame frame = new JFrame("Nvm něco");
-        JScrollPane scrollPane = new JScrollPane(Window.shopTable);
-        frame.getContentPane().add(scrollPane);
 
+        // Define the column names
+        String[] columnNames = {"Column 1", "Column 2", "Column 3"};
+
+        // Create an empty data array with the same length as column names
+        Object[][] data = new Object[0][columnNames.length];
+
+        // Create a DefaultTableModel with the data and column names
+        DefaultTableModel model = new DefaultTableModel(data, columnNames);
+
+        // Set the model for the table
+        setModel(model);
     }
 
+    private void updateModel() {
+        DefaultTableModel model = (DefaultTableModel) getModel();
+        model.setRowCount(0); // Clear the existing data
+
+        // Iterate over the ArrayList and add each item as a row to the model
+        for (String item : arrayList) {
+            model.addRow(new Object[]{item, "", ""}); // You can modify the column values as needed
+        }
+    }
 }

@@ -7,10 +7,10 @@ public class Window extends JFrame {
     // menubar
     static JMenuBar menuBar = new JMenuBar();
 
-    static ShopTable shopTable = new ShopTable(400, 500);
+    static ShopTable shopTable = new ShopTable();
 
     // JMenu
-    static JMenu menu;
+    static JMenu menu = new JMenu("Menu");
 
     // Menu items
     static JMenuItem menuItem1, menuItem2, menuItem3;
@@ -23,6 +23,7 @@ public class Window extends JFrame {
 
     }
 
+    // 2. Funkce
     private void init(int width, int height) {
         setTitle("Clicker");
         setVisible(true);
@@ -31,7 +32,7 @@ public class Window extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setJMenuBar(menuBar);
 
-        menu = new JMenu("Menu");
+
         menuItem1 = new JMenuItem("MenuItem1");
         menuItem2 = new JMenuItem("MenuItem2");
         menuItem3 = new JMenuItem("MenuItem3");
@@ -47,20 +48,33 @@ public class Window extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
+        JTextField textField = new JTextField();
+        panel.add(textField);
+        textField.setMaximumSize(
+                new Dimension(150, 40));
         JLabel counter = new JLabel(value.toString());
         panel.add(counter);
         JButton button = new JButton("Počítej");
         panel.add(button);
-        panel.add(shopTable);
+        JButton odstran = new JButton("Znič");
+        panel.add(odstran);
+        panel.add(new JScrollPane(shopTable));
+        button.addActionListener(e -> {
+            System.out.println(textField.getText());
+            shopTable.addToList(textField.getText());
+            value++;
+            counter.setText(value.toString());
+            System.out.println(value);
+        });
 
-
-        button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                value++;
-                counter.setText(value.toString());
-                System.out.println(value);
+        odstran.addActionListener(e -> {
+            if (shopTable.listSize() > 0) {
+                shopTable.removeFromList(0);
+            } else {
+                System.out.println("nelze odstranit elemnt protože seznam je prázdný");
             }
         });
+
         add(panel);
 
     }
